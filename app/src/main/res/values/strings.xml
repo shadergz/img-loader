@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">IMG Loader</string>
+    <string name="load_image">Load Image</string>
+    <string name="load_an_image_file">Load an Image File</string>
+</resources>
