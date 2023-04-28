@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/loadImage"
         android:title="@string/menu_load_image">
@@ -16,12 +15,5 @@
     <item
         android:id="@+id/save"
         android:title="@string/menu_save">
-    </item>
-    <item
-        android:id="@+id/searchModel"
-        android:title="@string/menu_search_model"
-        android:icon="@drawable/baseline_search_24"
-        app:showAsAction="always"
-        app:actionViewClass="android.widget.SearchView">
     </item>
 </menu>

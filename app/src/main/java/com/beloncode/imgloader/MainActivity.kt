@@ -1,7 +1,6 @@
 package com.beloncode.imgloader
 
 import android.Manifest
-import android.app.SearchManager
 import android.content.Intent
 import android.content.pm.PackageManager
 
@@ -13,7 +12,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val selectedItems = Vector<ItemModel>()
-    private val dffItems = Vector<ItemModel>()
+    private val dffItems = ArrayList<ItemModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +59,28 @@ class MainActivity : AppCompatActivity() {
                     OnSelectedType.UNSELECTED-> selectedItems.remove(dffModel)
                     OnSelectedType.PRESSED-> {}
                 }
+            }
+        }
+
+        binding.searchModels.apply {
+            clearFocus()
+            setOnQueryTextListener(object: OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    (binding.dffItems.adapter as AdapterItems).apply {
+                        filterList(query!!)
+                    }
+                    return true
+                }
+            })
+            setOnCloseListener {
+                (binding.dffItems.adapter as AdapterItems).apply {
+                    removeFilter()
+                }
+                true
             }
         }
     }
@@ -98,15 +119,9 @@ class MainActivity : AppCompatActivity() {
         openIntentCallback.launch(openDocumentIntent)
     }
 
-    private lateinit var searchView: SearchView
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.statusbar_menu, menu)
-        val searchManager = getSystemService(SEARCH_SERVICE) as SearchManager
-        searchView = menu?.findItem(R.id.searchModel)?.actionView as SearchView
-        searchView.apply {
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        }
+
 
         return true
     }
@@ -118,9 +133,15 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.selectAll -> {
+                (binding.dffItems.adapter as AdapterItems).apply {
+                    selectAll()
+                }
                 return true
             }
             R.id.unselectAll -> {
+                (binding.dffItems.adapter as AdapterItems).apply {
+                    unselectAll()
+                }
                 return true
             }
             else -> super.onOptionsItemSelected(item)

@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="dff_item_name">IMAGE DFF ITEM</string>
-    <string name="menu_select_all">Select all</string>
-    <string name="menu_unselect_all">Unselect all</string>
-    <string name="menu_search_model">Search model</string>
-    <string name="menu_save">Save</string>
-    <string name="search_hint">Search for models name</string>
+
 </resources>

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.util.Vector
 
 enum class OnSelectedType {
     PRESSED,
@@ -15,7 +14,7 @@ enum class OnSelectedType {
 }
 
 class AdapterItems(
-    private val models: Vector<ItemModel>,
+    private var models: ArrayList<ItemModel>,
     val onSelected: (ItemModel, OnSelectedType) -> Unit
 ) : RecyclerView.Adapter<AdapterItems.ItemsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemsViewHolder {
@@ -26,9 +25,43 @@ class AdapterItems(
     override fun getItemCount() = models.size
 
     private var inSelectionMode: Boolean = false
+    private lateinit var filter: ArrayList<ItemModel>
+
+    private var blackList = ArrayList<ItemModel>()
+
+    fun removeFilter() {
+        blackList.forEach {
+            models.add(it)
+            notifyItemInserted(models.indexOf(it))
+        }
+        blackList.clear()
+    }
+    private fun applyFilter(filtered: ArrayList<ItemModel>) {
+        filter = models.filterNot { filtered.contains(it) } as ArrayList<ItemModel>
+        filter.forEach {
+            notifyItemRemoved(models.indexOf(it))
+            blackList.add(it)
+            models.remove(it)
+        }
+    }
+
+    fun filterList(filter: String) {
+        val filterBy = filter.uppercase()
+        val filtered = models.filter {
+            it.dffName.uppercase().contains(filterBy)
+        } as ArrayList<ItemModel>
+
+        if (filtered.isNotEmpty()) {
+            applyFilter(filtered)
+        }
+    }
 
     private fun enterInSelectionMode() {
         models.forEach {
+            it.marked = 1
+            notifyItemChanged(models.indexOf(it))
+        }
+        blackList.forEach {
             it.marked = 1
             notifyItemChanged(models.indexOf(it))
         }
@@ -40,10 +73,13 @@ class AdapterItems(
             it.marked = 0
             notifyItemChanged(models.indexOf(it))
         }
+        blackList.forEach {
+            it.marked = 0
+            notifyItemChanged(models.indexOf(it))
+        }
         inSelectionMode = !inSelectionMode
     }
 
-    @Suppress("unused")
     fun selectAll() {
         models.forEach {
             if (it.marked != 2) {
@@ -54,7 +90,6 @@ class AdapterItems(
         inSelectionMode = !inSelectionMode
     }
 
-    @Suppress("unused")
     fun unselectAll() {
         if (!inSelectionMode) return
 
@@ -68,9 +103,14 @@ class AdapterItems(
     private val selectedCount: Int
         get() {
             var countMarked = 0
-            for (model in models)
-                if (model.marked == 2)
+            models.forEach {
+                if (it.marked == 2)
                     countMarked++
+            }
+            blackList.forEach {
+                if (it.marked == 2)
+                    countMarked++
+            }
             return countMarked
         }
 
