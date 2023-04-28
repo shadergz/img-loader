@@ -1,7 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">IMG Loader</string>
-    <string name="menu_load_image">Load Image</string>
-    <string name="load_an_image_file">Load an Image File</string>
     <string name="dff_item_name">IMAGE DFF ITEM</string>
     <string name="menu_select_all">Select all</string>
     <string name="menu_unselect_all">Unselect all</string>
