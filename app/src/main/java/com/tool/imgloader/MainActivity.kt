@@ -1,4 +1,4 @@
-package com.beloncode.imgloader
+package com.tool.imgloader
 
 import android.Manifest
 import android.content.Intent
@@ -18,7 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.beloncode.imgloader.databinding.ActivityMainBinding
+import com.tool.imgloader.databinding.ActivityMainBinding
 import java.util.Vector
 
 class MainActivity : AppCompatActivity() {

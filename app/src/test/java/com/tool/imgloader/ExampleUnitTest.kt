@@ -1,4 +1,4 @@
-package com.beloncode.imgloader
+package com.tool.imgloader
 
 import org.junit.Test
 
